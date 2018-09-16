@@ -41,6 +41,6 @@ command /rtp [<text>]:
 			teleport player to location at {_x}, {_y}, {_z}
 			set {rtp.%player's uuid%} to now
 			set {rtp::%player's uuid%} to true
-			send "&7You are invulterable for 20 seconds."
+			send "&7You are invulnerable for 20 seconds."
 			wait 20 seconds
 			delete {rtp::%player's uuid%}
