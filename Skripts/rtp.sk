@@ -1,1 +1,46 @@
+options:
+	permission: wild
+	permission message: &cYou don't have access to that command.
 
+	success message: &7Teleported to &ax. %{_x}%&7, &by. %{_y}%&7, &cz. %{_z}%&7.
+
+	minimum x: 0 
+	maximum x: 5000
+	
+	minimum y: 25
+	maximum y: 80
+
+	minimum z: 0
+	maximum z: 5000
+
+# (Don't Edit this Stuff unless you know how <3)
+
+on damage of player:
+	if {rtp::%victim's uuid%} is set:
+		cancel event
+	if {rtp::%attacker's uuid%} is set:
+		cancel event
+
+on quit:
+	delete {rtp::%player's uuid%}
+	delete {rtp.%player's uuid%}
+
+command /rtp [<text>]:
+	permission: {@permission}
+	permission message: {@permission message}
+	aliases: /wild
+	trigger:
+		set {_time} to difference between {rtp.%player's uuid%} and now
+		if {_time} is less than 5 minutes:
+			send "&7Please wait %difference between 5 minutes and {_time}% to use /rtp."
+		else:
+			set {_x} to a random integer between {@minimum x} and {@maximum x}
+			set {_y} to a random integer between {@minimum y} and {@maximum y}
+			set {_z} to a random integer between {@minimum z} and {@maximum z}
+			send "{@success message}"
+			teleport player to location at {_x}, {_y}, {_z}
+			set {rtp.%player's uuid%} to now
+			set {rtp::%player's uuid%} to true
+			send "&7You are invulterable for 20 seconds."
+			wait 20 seconds
+			delete {rtp::%player's uuid%}
