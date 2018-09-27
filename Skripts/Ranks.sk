@@ -1,0 +1,80 @@
+
+
+command /rank [<offlineplayer>] [<text>]:
+	permission: admin
+	permission message: &cYou don't have access to this command.
+	trigger:
+		if arg 1 and arg 2 is not set:
+			send "&c/rank (player) (rank)"
+		else:
+			if arg 2 is "default":
+				delete {rank::%arg 1's uuid%}
+				send "&7Successfully updated %arg 1%'s rank to Default."
+			else if arg 2 is "jrmod":
+				if {jrmod} is not set:
+					send "&cYou must run /prefix jrmod (prefix) first."
+				else:
+					set {rank::%arg 1's uuid%} to "jrmod"
+					send "&7Successfully updated %arg 1%'s rank to %{jrmod}%&7."
+			else if arg 2 is "mod":
+				if {mod} is not set:
+					send "&cYou must run /prefix mod (prefix) first."
+				else:
+					set {rank::%arg 1's uuid%} to "mod"
+					send "&7Successfully updated %arg 1%'s rank to %{mod}%&7."
+			else if arg 2 is "srmod":
+				if {srmod} is not set:
+					send "&cYou must run /prefix srmod (prefix) first."
+				else:
+					set {rank::%arg 1's uuid%} to "srmod"
+					send "&7Successfully updated %arg 1%'s rank to %{srmod}%&7."
+			else if arg 2 is "admin":
+				if {admin} is not set:
+					send "&cYou must run /prefix admin (prefix) first."
+				else:
+					set {rank::%arg 1's uuid%} to "admin"
+					send "&7Successfully updated %arg 1%'s rank to %{admin}%&7."
+			else:
+				send "&cInvalid Rank!"
+
+command /prefix [<text>] [<text>]:
+	permission: admin
+	permission message: &cYou don't have access to this command.
+	trigger:
+		if arg 1 and arg 2 is not set:
+			send "&c/prefix (rank) (prefix)"
+		else:
+			if arg 1 is not "jrmod" or "mod" or "srmod" or "admin":
+				send "&cInvalid Rank!"
+			else if arg 1 is "jrmod" or "mod" or "srmod" or "admin":
+				if arg 1 is "jrmod":
+					send ""
+					send "%{jrmod}%%player%"
+					send "&7to"
+					send "%colored arg 2%%player%"
+					send ""
+					set {jrmod} to "&f%colored arg 2%"
+				if arg 1 is "mod":
+					send ""
+					send "%{mod}%%player%"
+					send "&7to"
+					send "%colored arg 2%%player%"
+					send ""
+					set {mod} to "&f%colored arg 2%"
+				if arg 1 is "srmod":
+					send ""
+					send "%{srmod}%%player%"
+					send "&7to"
+					send "%colored arg 2%%player%"
+					send ""
+					set {srmod} to "&f%colored arg 2%"
+				if arg 1 is "admin":
+					send ""
+					send "%{admin}%%player%"
+					send "&7to"
+					send "%colored arg 2%%player%"
+					send ""
+					set {admin} to "&f%colored arg 2%"
+
+# Displaying a rank:
+# %{%{rank::%player's uuid%}%}%
