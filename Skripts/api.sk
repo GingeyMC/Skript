@@ -1,0 +1,98 @@
+command /api [<text>]:
+	trigger:
+		if arg 1 is not set:
+			send "&c/api (server)"
+		else:
+			send "&7Connecting you to %arg 1%..."
+			wait 5 ticks
+			if arg 1 is "Warzone":
+				send "&c'Warzone' is hosted Externally."
+			else:
+				set {_url} to text from url "https://pocket.minehut.com/server/%arg 1%?byName=true"
+				if {_url} is "{""server"":null}":
+					send "&7It seems that &b'%arg 1%' &7dosen't exist."
+				else:
+					set {_spliturl::*} to {_url} split at ","
+					loop {_spliturl::*}:
+						if "%loop-value%" contains """resource_pack"":":
+							set {_resource} to "%loop-value%"
+							replace all """resource_pack"":" in {_resource} with ""
+							replace all """" in {_resource} with ""
+						if "%loop-value%" contains """credits_per_day"":":
+							set {_credits1} to "%loop-value%"
+							replace all """credits_per_day"":" in {_credits1} with ""
+							replace all """" in {_credits1} with ""
+							set {_credits} to {_credits1} parsed as integer
+						if "%loop-value%" contains """motd"":":
+							set {_motd} to "%loop-value%"
+							replace all """motd"":" in {_motd} with ""
+							replace all "\n" in {_motd} with "%nl% &2| "
+							replace all """" in {_motd} with ""
+						if "%loop-value%" contains """max_players"":":
+							set {_maxplayers} to "%loop-value%"
+							replace all """max_players"":" and "}" in {_maxplayers} with ""
+						if "%loop-value%" contains "{""server"":{""_id"":" or "_id"":":
+							set {_id} to "%loop-value%"
+							replace all "{""server"":{""_id"":" in {_id} with ""
+							replace all """_id"":" in {_id} with ""
+							replace all """" in {_id} with ""
+					set {_url} to text from url "https://pocket.minehut.com/servers"
+					if {_url} contains "{""_id"":""%{_id}%""":
+						set {_spliturl::*} to {_url} split at ","
+						loop {_spliturl::*}:
+							if "%loop-value%" contains "{""_id"":""%{_id}%""":
+								set {_index} to loop-index parsed as integer
+								add 1 to {_index}
+								set {_onlineplayers} to "%{_spliturl::%{_index}%}%"
+								replace all """playerCount"":" in {_onlineplayers} with ""
+						if {_plugins::*} is set:
+						if {_maxplayers} is "10":
+							set {_ram} to "1.0gb"
+						if {_maxplayers} is "15":
+							set {_ram} to "1.2gb"
+						if {_maxplayers} is "25":
+							set {_ram} to "2.0gb"
+						if {_maxplayers} is "35":
+							set {_ram} to "2.8gb"
+						if {_maxplayers} is "42":
+							set {_ram} to "3.4gb"
+						if {_maxplayers} is "50":
+							set {_ram} to "4.0gb"
+						if {_maxplayers} is "60":
+							set {_ram} to "4.8gb"
+						if {_maxplayers} is "75":
+							set {_ram} to "6.0gb"
+						if {_resource} does not contain ".":
+							set {_resource} to "NaN"
+						if {_credits} is not set:
+							set {_credits} to 0
+						if {_ram} is not set:
+							set {_ram} to "NaN"
+						if {_maxplayers} is not set:
+							set {_maxplayers} to "NaN"
+						send ""
+						send " &cAPI &4| &7Viewing data of &c%arg 1%"
+						send ""
+						if {_maxplayers} is "10":
+							send " &4| &c%{_onlineplayers}%&8/&c%{_maxplayers}% &7players online:"
+						if {_maxplayers} is not "10":
+							send " &2| &a%{_onlineplayers}%&8/&a%{_maxplayers}% &7players online:"
+						if {_credits} is 0:
+							send " &4| &7Credits per day: &c%{_credits}%"
+						if {_credits} is not 0:
+							send " &2| &7Credits per day: &a%{_credits}%"
+						if {_ram} is "1.0gb":
+							send " &4| &7Ram Usage: &cNaN&8/&c%{_ram}%"
+						if {_ram} is not "1.0gb":
+							send " &2| &7Ram Usage: &aNaN&8/&a%{_ram}%"
+						if {_resource} is "NaN":
+							send " &4| &7Resource Pack: <link:%{_resource}%>&c%{_resource}%"
+						if {_resource} is not "NaN":
+							send " &2| &7Resource Pack: <link:%{_resource}%>&7&nClick here."
+						send ""
+						send " &2| <tooltip: &2| %{_motd}%>&7&n(Motd)"
+						send ""
+						send "&fPlugins: &aComing Soon™"
+						send ""
+					else:
+						send "&c'%arg 1%' is currently offline."
