@@ -8,7 +8,8 @@ command /api [<text>]:
 			if arg 1 is "Warzone":
 				send "&c'Warzone' is hosted Externally."
 			else:
-				set {_url} to text from url "https://pocket.minehut.com/server/%arg 1%?byName=true"
+				async:
+					set {_url} to text from url "https://pocket.minehut.com/server/%arg 1%?byName=true"
 				if {_url} is "{""server"":null}":
 					send "&7It seems that &b'%arg 1%' &7dosen't exist."
 				else:
@@ -36,7 +37,8 @@ command /api [<text>]:
 							replace all "{""server"":{""_id"":" in {_id} with ""
 							replace all """_id"":" in {_id} with ""
 							replace all """" in {_id} with ""
-					set {_url} to text from url "https://pocket.minehut.com/servers"
+					async:
+						set {_url} to text from url "https://pocket.minehut.com/servers"
 					if {_url} contains "{""_id"":""%{_id}%""":
 						set {_spliturl::*} to {_url} split at ","
 						loop {_spliturl::*}:
